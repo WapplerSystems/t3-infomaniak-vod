@@ -1,0 +1,21 @@
+{
+	"name": "wapplersystems/infomaniak-vod",
+	"type": "typo3-cms-extension",
+	"description": "Infomaniak VOD extension for TYPO3",
+	"license": [
+		"GPL-2.0+"
+	],
+	"require": {
+		"typo3/cms-core": "^13"
+	},
+	"autoload": {
+		"psr-4": {
+			"WapplerSystems\\InfomaniakVod\\": "Classes"
+		}
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "infomaniak_vod"
+		}
+	}
+}
