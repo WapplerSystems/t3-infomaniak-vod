@@ -2,6 +2,7 @@
 
 namespace WapplerSystems\InfomaniakVod\Resource\OnlineMedia\Helpers;
 
+use TYPO3\CMS\Core\Resource\Exception\OnlineMediaAlreadyExistsException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\AbstractOEmbedHelper;
@@ -20,7 +21,7 @@ class InfomaniakVodHelper extends AbstractOEmbedHelper
     public function getPublicUrl(File $file)
     {
         $videoId = $this->getOnlineMediaId($file);
-        return sprintf('https://www.youtube.com/watch?v=%s', rawurlencode($videoId));
+        return sprintf('https://player.vod2.infomaniak.com/embed/%s', rawurlencode($videoId));
     }
 
     /**
@@ -33,7 +34,6 @@ class InfomaniakVodHelper extends AbstractOEmbedHelper
 
         $videoId = $this->getOnlineMediaId($file);
         $temporaryFileName = $this->getTempFolderPath() . 'infomaniakvod_' . md5($videoId) . '.jpg';
-
 
         if (!file_exists($temporaryFileName)) {
             $previewImage = GeneralUtility::getUrl(
@@ -78,10 +78,31 @@ class InfomaniakVodHelper extends AbstractOEmbedHelper
      */
     protected function getOEmbedUrl($mediaId, $format = 'json')
     {
-        return sprintf(
-            'https://www.youtube.com/oembed?url=%s&format=%s&maxwidth=2048&maxheight=2048',
-            rawurlencode(sprintf('https://www.youtube.com/watch?v=%s', rawurlencode($mediaId))),
-            rawurlencode($format)
-        );
+        return sprintf('https://api.infomaniak.com/2/vod/res/shares/%s.json',rawurlencode($mediaId));
     }
+
+    /**
+     * Transform mediaId to File
+     *
+     * @param string $mediaId
+     * @param string $fileExtension
+     * @return File
+     */
+    protected function transformMediaIdToFile($mediaId, Folder $targetFolder, $fileExtension)
+    {
+        $file = $this->findExistingFileByOnlineMediaId($mediaId, $targetFolder, $fileExtension);
+        if ($file !== null) {
+            throw new OnlineMediaAlreadyExistsException($file, 1695236851);
+        }
+        // no existing file create new
+        $oEmbed = $this->getOEmbedData($mediaId);
+
+        if (!empty($oEmbed['data']['media']['0']['title'] ?? '')) {
+            $fileName = $oEmbed['data']['media']['0']['title'] . '.' . $fileExtension;
+        } else {
+            $fileName = $mediaId . '.' . $fileExtension;
+        }
+        return $this->createNewFile($targetFolder, $fileName, $mediaId);
+    }
+
 }
