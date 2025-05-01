@@ -25,7 +25,6 @@ use TYPO3\CMS\Core\Resource\Rendering\FileRendererInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * YouTube renderer class
  */
 class InfomaniakVodRenderer implements FileRendererInterface
 {
@@ -152,13 +151,13 @@ class InfomaniakVodRenderer implements FileRendererInterface
             $urlParams[] = 'enablejsapi=1&origin=' . rawurlencode(GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST'));
         }
 
-        $youTubeUrl = sprintf(
+        $infomaniakUrl = sprintf(
             'https://player.vod2.infomaniak.com/embed/%s?%s',
             rawurlencode($videoId),
             implode('&', $urlParams)
         );
 
-        return $youTubeUrl;
+        return $infomaniakUrl;
     }
 
     /**

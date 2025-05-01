@@ -6,7 +6,6 @@ use TYPO3\CMS\Core\Resource\Exception\OnlineMediaAlreadyExistsException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\AbstractOEmbedHelper;
-use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -103,6 +102,22 @@ class InfomaniakVodHelper extends AbstractOEmbedHelper
             $fileName = $mediaId . '.' . $fileExtension;
         }
         return $this->createNewFile($targetFolder, $fileName, $mediaId);
+    }
+
+
+    public function getMetaData(File $file)
+    {
+        $metadata = [];
+
+        $oEmbed = $this->getOEmbedData($this->getOnlineMediaId($file));
+        $metadata['width'] = 0;
+        $metadata['height'] = 0;
+
+        if (empty($file->getProperty('title'))) {
+            $metadata['title'] = strip_tags($oEmbed['title'] ?? '');
+        }
+
+        return $metadata;
     }
 
 }
