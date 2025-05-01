@@ -90,7 +90,7 @@ class InfomaniakVodRenderer implements FileRendererInterface
     public function render(FileInterface $file, $width, $height, array $options = [])
     {
         $options = $this->collectOptions($options, $file);
-        $src = $this->createYouTubeUrl($options, $file);
+        $src = $this->createInfomaniakVodUrl($options, $file);
         $attributes = $this->collectIframeAttributes($width, $height, $options);
 
         return sprintf(
@@ -128,7 +128,7 @@ class InfomaniakVodRenderer implements FileRendererInterface
     /**
      * @return string
      */
-    protected function createYouTubeUrl(array $options, FileInterface $file)
+    protected function createInfomaniakVodUrl(array $options, FileInterface $file)
     {
         $videoId = $this->getVideoIdFromFile($file);
 

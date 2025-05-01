@@ -1,9 +1,11 @@
 <?php
 
-namespace TYPO3\CMS\Core\Resource\OnlineMedia\Helpers;
+namespace WapplerSystems\InfomaniakVod\Resource\OnlineMedia\Helpers;
 
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
+use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\AbstractOEmbedHelper;
+use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -28,19 +30,17 @@ class InfomaniakVodHelper extends AbstractOEmbedHelper
      */
     public function getPreviewImage(File $file)
     {
+
         $videoId = $this->getOnlineMediaId($file);
-        $temporaryFileName = $this->getTempFolderPath() . 'youtube_' . md5($videoId) . '.jpg';
+        $temporaryFileName = $this->getTempFolderPath() . 'infomaniakvod_' . md5($videoId) . '.jpg';
+
 
         if (!file_exists($temporaryFileName)) {
-            $tryNames = ['maxresdefault.jpg', 'sddefault.jpg', 'hqdefault.jpg', 'mqdefault.jpg', '0.jpg'];
-            foreach ($tryNames as $tryName) {
-                $previewImage = GeneralUtility::getUrl(
-                    sprintf('https://img.youtube.com/vi/%s/%s', $videoId, $tryName)
-                );
-                if ($previewImage !== false) {
-                    GeneralUtility::writeFile($temporaryFileName, $previewImage, true);
-                    break;
-                }
+            $previewImage = GeneralUtility::getUrl(
+                sprintf('https://api.vod2.infomaniak.com/2/vod/res/shares/%s.preload.jpeg', $videoId)
+            );
+            if ($previewImage !== false) {
+                GeneralUtility::writeFile($temporaryFileName, $previewImage, true);
             }
         }
 
@@ -55,18 +55,13 @@ class InfomaniakVodHelper extends AbstractOEmbedHelper
      */
     public function transformUrlToFile($url, Folder $targetFolder)
     {
+
         $videoId = null;
         // Try to get the YouTube code from given url.
         // These formats are supported with and without http(s)://
-        // - youtu.be/<code> # Share URL
-        // - www.youtube.com/watch?v=<code> # Normal web link
-        // - www.youtube.com/v/<code>
-        // - www.youtube-nocookie.com/v/<code> # youtube-nocookie.com web link
-        // - www.youtube.com/embed/<code> # URL form iframe embed code, can also get code from full iframe snippet
-        // - www.youtube.com/shorts/<code>
-        // - www.youtube.com/live/<code>
-        if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?|shorts|live)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match)) {
-            $videoId = $match[1];
+        // - player.vod2.infomaniak.com/share/12345678
+        if (preg_match('%https?://player\.vod2\.infomaniak\.com/share/([^/?#]+)%i', $url, $matches)) {
+            $videoId = $matches[1];
         }
         if (empty($videoId)) {
             return null;

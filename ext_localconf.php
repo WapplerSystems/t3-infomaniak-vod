@@ -16,8 +16,11 @@ $iconRegistry->registerFileExtension('infomaniakvod', 'mimetypes-media-video-inf
 $iconRegistry->registerIcon(
     'mimetypes-media-video-infomaniakvod',
     BitmapIconProvider::class,
-    ['source' => 'EXT:infomaniak-vod/Resources/Public/Icons/infomaniakvod.png']
+    ['source' => 'EXT:infomaniak_vod/Resources/Public/Icons/infomaniakvod.png']
 );
 
 
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['fal']['onlineMediaHelpers']['vod'] = \WapplerSystems\InfomaniakVod\Resource\OnlineMedia\Helpers\InfomaniakVodHelper::class;
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['fal']['onlineMediaHelpers']['infomaniakvod'] = \WapplerSystems\InfomaniakVod\Resource\OnlineMedia\Helpers\InfomaniakVodHelper::class;
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['mediafile_ext'] .= ',infomaniakvod';
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['FileInfo']['fileExtensionToMimeType']['infomaniakvod'] = 'video/infomaniakvod';
+

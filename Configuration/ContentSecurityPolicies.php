@@ -15,7 +15,7 @@ use TYPO3\CMS\Core\Type\Map;
 /**
  * Provides a simple basic Content-Security-Policy for the generic backend scope.
  */
-return Map::fromEntries([
+$backend = [
     Scope::backend(),
     new MutationCollection(
         new Mutation(
@@ -24,4 +24,17 @@ return Map::fromEntries([
             new UriValue('*.infomaniak.com')
         ),
     ),
-]);
+];
+
+$frontend = [
+    Scope::frontend(),
+    new MutationCollection(
+        new Mutation(
+            MutationMode::Extend,
+            Directive::FrameSrc,
+            new UriValue('*.infomaniak.com')
+        ),
+    ),
+];
+
+return Map::fromEntries($backend);
