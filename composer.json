@@ -1,7 +1,7 @@
 {
 	"name": "wapplersystems/infomaniak-vod",
 	"type": "typo3-cms-extension",
-	"description": "Infomaniak VOD extension for TYPO3",
+	"description": "Infomaniak VOD video streaming extension for TYPO3",
 	"license": [
 		"GPL-2.0+"
 	],

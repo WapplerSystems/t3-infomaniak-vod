@@ -2,7 +2,7 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Infomaniak VOD',
-    'description' => 'An alternative video service like Youtube or Vimeo.',
+    'description' => 'An alternative video streaming service like Youtube or Vimeo. Hosted by the Swiss hoser Infomaniak.',
     'category' => 'plugin',
     'author' => 'Sven Wappler',
     'author_email' => 'typo3YYYY@wappler.systems',
