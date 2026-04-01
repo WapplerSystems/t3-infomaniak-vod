@@ -1,21 +1,39 @@
 {
-	"name": "wapplersystems/infomaniak-vod",
-	"type": "typo3-cms-extension",
-	"description": "Infomaniak VOD video streaming extension for TYPO3",
-	"license": [
-		"GPL-2.0+"
-	],
-	"require": {
-		"typo3/cms-core": "^13"
-	},
-	"autoload": {
-		"psr-4": {
-			"WapplerSystems\\InfomaniakVod\\": "Classes"
-		}
-	},
-	"extra": {
-		"typo3/cms": {
-			"extension-key": "infomaniak_vod"
-		}
-	}
+    "name": "wapplersystems/infomaniak-vod",
+    "type": "typo3-cms-extension",
+    "description": "Infomaniak VOD video streaming extension for TYPO3",
+    "homepage": "https://github.com/WapplerSystems/t3-infomaniak-vod",
+    "license": "GPL-2.0-or-later",
+    "keywords": [
+        "TYPO3",
+        "extension",
+        "infomaniak",
+        "vod",
+        "video"
+    ],
+    "authors": [
+        {
+            "name": "Sven Wappler",
+            "email": "typo3@wappler.systems",
+            "role": "Developer",
+            "homepage": "https://wappler.systems"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/WapplerSystems/t3-infomaniak-vod/issues",
+        "source": "https://github.com/WapplerSystems/t3-infomaniak-vod"
+    },
+    "require": {
+        "typo3/cms-core": "^13"
+    },
+    "autoload": {
+        "psr-4": {
+            "WapplerSystems\\InfomaniakVod\\": "Classes"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "infomaniak_vod"
+        }
+    }
 }
