@@ -35,11 +35,19 @@ class InfomaniakVodHelper extends AbstractOEmbedHelper
         $temporaryFileName = $this->getTempFolderPath() . 'infomaniakvod_' . md5($videoId) . '.jpg';
 
         if (!file_exists($temporaryFileName)) {
-            $previewImage = GeneralUtility::getUrl(
-                sprintf('https://api.vod2.infomaniak.com/2/vod/res/shares/%s.preload.jpeg', $videoId)
-            );
-            if ($previewImage !== false) {
-                GeneralUtility::writeFile($temporaryFileName, $previewImage, true);
+            // The old ".preload.jpeg" share URL returns 404, the share data names the current image URLs
+            $oEmbed = $this->getOEmbedData($videoId);
+            $tryUrls = array_filter([
+                $oEmbed['data']['media'][0]['thumbnails']['poster'] ?? '',
+                $oEmbed['data']['player']['preload_image'] ?? '',
+                sprintf('https://api.infomaniak.com/2/vod/res/shares/%s.preload.jfif', rawurlencode($videoId)),
+            ]);
+            foreach ($tryUrls as $tryUrl) {
+                $previewImage = GeneralUtility::getUrl($tryUrl);
+                if ($previewImage !== false && $previewImage !== '') {
+                    GeneralUtility::writeFile($temporaryFileName, $previewImage, true);
+                    break;
+                }
             }
         }
 
@@ -96,8 +104,8 @@ class InfomaniakVodHelper extends AbstractOEmbedHelper
         // no existing file create new
         $oEmbed = $this->getOEmbedData($mediaId);
 
-        if (!empty($oEmbed['data']['media']['0']['title'] ?? '')) {
-            $fileName = $oEmbed['data']['media']['0']['title'] . '.' . $fileExtension;
+        if (!empty($oEmbed['data']['media'][0]['title'] ?? '')) {
+            $fileName = $oEmbed['data']['media'][0]['title'] . '.' . $fileExtension;
         } else {
             $fileName = $mediaId . '.' . $fileExtension;
         }
@@ -110,11 +118,12 @@ class InfomaniakVodHelper extends AbstractOEmbedHelper
         $metadata = [];
 
         $oEmbed = $this->getOEmbedData($this->getOnlineMediaId($file));
-        $metadata['width'] = 0;
-        $metadata['height'] = 0;
+        // The share data has no oEmbed format: the player size and the media title are nested
+        $metadata['width'] = (int)($oEmbed['data']['player']['width'] ?? 0);
+        $metadata['height'] = (int)($oEmbed['data']['player']['height'] ?? 0);
 
         if (empty($file->getProperty('title'))) {
-            $metadata['title'] = strip_tags($oEmbed['title'] ?? '');
+            $metadata['title'] = strip_tags($oEmbed['data']['media'][0]['title'] ?? '');
         }
 
         return $metadata;
