@@ -1,7 +1,6 @@
 <?php
 
 
-use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Resource\Rendering\RendererRegistry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WapplerSystems\InfomaniakVod\Resource\OnlineMedia\Helpers\InfomaniakVodHelper;
@@ -14,5 +13,3 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['FileInfo']['fileExtensionToMimeType']['infom
 $rendererRegistry = GeneralUtility::makeInstance(RendererRegistry::class);
 $rendererRegistry->registerRendererClass(InfomaniakVodRenderer::class);
 unset($rendererRegistry);
-
-GeneralUtility::makeInstance(IconRegistry::class)->registerFileExtension('infomaniakvod', 'mimetypes-media-video-infomaniakvod');
