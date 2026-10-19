@@ -13,7 +13,7 @@ use TYPO3\CMS\Core\Security\ContentSecurityPolicy\UriValue;
 use TYPO3\CMS\Core\Type\Map;
 
 /**
- * Provides a simple basic Content-Security-Policy for the generic backend scope.
+ * Allows the Infomaniak player iframe in the backend and the frontend scope.
  */
 $backend = [
     Scope::backend(),
@@ -37,4 +37,4 @@ $frontend = [
     ),
 ];
 
-return Map::fromEntries($backend);
+return Map::fromEntries($backend, $frontend);
