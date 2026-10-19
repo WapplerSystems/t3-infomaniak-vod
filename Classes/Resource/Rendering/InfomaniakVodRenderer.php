@@ -88,6 +88,11 @@ class InfomaniakVodRenderer implements FileRendererInterface
      */
     public function render(FileInterface $file, $width, $height, array $options = [])
     {
+        // Infomaniak does not deliver dimensions, so the gallery cannot calculate a proper size
+        if ((int)$width <= 0 || (int)$height <= 0) {
+            $width = 560;
+            $height = 315;
+        }
         $options = $this->collectOptions($options, $file);
         $src = $this->createInfomaniakVodUrl($options, $file);
         $attributes = $this->collectIframeAttributes($width, $height, $options);
