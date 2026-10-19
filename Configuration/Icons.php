@@ -3,7 +3,7 @@
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
 
 return [
-    'ext-address-type-default' => [
+    'mimetypes-media-video-infomaniakvod' => [
         'provider' => BitmapIconProvider::class,
         'source' => 'EXT:infomaniak_vod/Resources/Public/Icons/infomaniakvod.png',
     ],
